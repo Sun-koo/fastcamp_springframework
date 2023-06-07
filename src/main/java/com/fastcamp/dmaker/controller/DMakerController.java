@@ -1,12 +1,15 @@
 package com.fastcamp.dmaker.controller;
 
+import com.fastcamp.dmaker.dto.CreateDeveloper;
+import com.fastcamp.dmaker.dto.DeveloperDTO;
+import com.fastcamp.dmaker.dto.DeveloperDetailDTO;
+import com.fastcamp.dmaker.dto.UpdateDeveloper;
 import com.fastcamp.dmaker.service.DMakerService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -16,16 +19,38 @@ public class DMakerController {
     private final DMakerService dMakerService;
 
     @GetMapping("/developers")
-    public List<String> getDevelopers() {
-        log.info("GET /developers HTTP/1.1");
-
-        return Arrays.asList("Snow", "Elsa", "Olaf");
+    public List<DeveloperDTO> getAllDevelopers() {
+        return dMakerService.getAllEmployedDevelopers();
     }
 
-    @GetMapping("/create-developer")
-    public List<String> createDeveloper() {
-        dMakerService.createDeveloper();
+    @GetMapping("/developer/{memberId}")
+    public DeveloperDetailDTO getDeveloperDetail(
+            @PathVariable String memberId
+    ) {
+        return dMakerService.getDeveloperDetail(memberId);
+    }
 
-        return List.of("Olaf");
+    @PostMapping("/create-developer")
+    public CreateDeveloper.Response createDeveloper(
+            @Valid @RequestBody CreateDeveloper.Request request
+    ) {
+        log.info("request : {}", request);
+
+        return dMakerService.createDeveloper(request);
+    }
+
+    @PutMapping("/developer/{memberId}")
+    public DeveloperDetailDTO updateDeveloper(
+            @PathVariable String memberId,
+            @Valid @RequestBody UpdateDeveloper.Request request
+    ) {
+        return dMakerService.updateDeveloper(memberId, request);
+    }
+
+    @DeleteMapping("developer/{memberId}")
+    public DeveloperDetailDTO deleteDeveloper(
+            @PathVariable String memberId
+    ) {
+        return dMakerService.deleteDeveloper(memberId);
     }
 }
