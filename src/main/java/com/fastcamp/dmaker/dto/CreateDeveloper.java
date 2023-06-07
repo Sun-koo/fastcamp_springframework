@@ -3,6 +3,7 @@ package com.fastcamp.dmaker.dto;
 import com.fastcamp.dmaker.entity.Developer;
 import com.fastcamp.dmaker.type.DeveloperLevel;
 import com.fastcamp.dmaker.type.DeveloperSkillType;
+import com.fastcamp.dmaker.type.StatusCode;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -35,6 +36,18 @@ public class CreateDeveloper {
         private String name;
         @Min(18)
         private Integer age;
+        
+        public Developer getEntity() {
+            return Developer.builder()
+                    .developerLevel(getDeveloperLevel())
+                    .developerSkillType(getDeveloperSkillType())
+                    .experienceYears(getExperienceYears())
+                    .name(getName())
+                    .age(getAge())
+                    .memberId(getMemberId())
+                    .statusCode(StatusCode.EMPLOYED)
+                    .build();
+        }
     }
 
     @Getter
